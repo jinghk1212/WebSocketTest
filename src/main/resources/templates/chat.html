@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>Insert title here</title>
+<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+	<div id="chat">
+		<div id="messageArea"></div>
+		<form id="messageForm">
+			<input type="text" id="messageInput" autocomplete="off" placeholder="메시지를 입력해주세요">
+			<button type="submit">전송</button>
+		</form>
+	</div>
+	
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/sockjs/1/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/stomp.js/2/stomp.min.js"></script>
+    <script>
+        var stompClient = null;
+
+        function connect() {
+            var socket = new SockJS('/chat');
+            stompClient = Stomp.over(socket);
+            stompClient.connect({}, function (frame) {
+                console.log('웹 소켓에 연결되었습니다: ' + frame);
+
+                stompClient.subscribe('/topic/public', function (chatMessage) {
+                    showMessage(JSON.parse(chatMessage.body));
+                });
+            });
+        }
+
+        function disconnect() {
+            if (stompClient !== null) {
+                stompClient.disconnect();
+            }
+            console.log("웹 소켓 연결이 닫혔습니다.");
+        }
+
+        function sendMessage() {
+            var messageInput = document.getElementById('messageInput');
+            var message = messageInput.value.trim();
+            if (message) {
+                var chatMessage = {
+                    content: message,
+                    sender: "사용자"
+                };
+                stompClient.send("/app/chat.sendMessage", {}, JSON.stringify(chatMessage));
+                messageInput.value = '';
+            }
+        }
+
+        function showMessage(chatMessage) {
+            var messageArea = document.getElementById('messageArea');
+            var messageElement = document.createElement('div');
+            messageElement.classList.add('message');
+            messageElement.innerHTML = '<strong>' + chatMessage.sender + '</strong>: ' + chatMessage.content;
+            messageArea.appendChild(messageElement);
+        }
+
+        document.getElementById('messageForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            sendMessage();
+        });
+
+        connect();
+    </script>
+</body>
+</html>
