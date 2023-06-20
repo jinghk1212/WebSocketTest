@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="EUC-KR">
+<meta charset="UTF-8">
 <title>Insert title here</title>
-<link rel="stylesheet" type="text/css" href="style.css">
+<link rel="stylesheet">
 </head>
 <body>
 	<div id="chat">
 		<div id="messageArea"></div>
 		<form id="messageForm">
-			<input type="text" id="messageInput" autocomplete="off" placeholder="¸Ş½ÃÁö¸¦ ÀÔ·ÂÇØÁÖ¼¼¿ä">
-			<button type="submit">Àü¼Û</button>
+			<input type="text" id="messageInput" autocomplete="off" placeholder="ë©”ì‹œì§€ë¥¼ ì…ë ¥í•´ì£¼ì„¸ìš”">
+			<button type="submit">ì „ì†¡</button>
 		</form>
 	</div>
 	
@@ -24,7 +24,7 @@
             var socket = new SockJS('/chat');
             stompClient = Stomp.over(socket);
             stompClient.connect({}, function (frame) {
-                console.log('À¥ ¼ÒÄÏ¿¡ ¿¬°áµÇ¾ú½À´Ï´Ù: ' + frame);
+                console.log('ì›¹ ì†Œì¼“ì— ì—°ê²°ë˜ì—ˆìŠµë‹ˆë‹¤: ' + frame);
 
                 stompClient.subscribe('/topic/public', function (chatMessage) {
                     showMessage(JSON.parse(chatMessage.body));
@@ -36,7 +36,7 @@
             if (stompClient !== null) {
                 stompClient.disconnect();
             }
-            console.log("À¥ ¼ÒÄÏ ¿¬°áÀÌ ´İÇû½À´Ï´Ù.");
+            console.log("ì›¹ ì†Œì¼“ ì—°ê²°ì´ ë‹«í˜”ìŠµë‹ˆë‹¤.");
         }
 
         function sendMessage() {
@@ -45,7 +45,7 @@
             if (message) {
                 var chatMessage = {
                     content: message,
-                    sender: "»ç¿ëÀÚ"
+                    sender: "ì‚¬ìš©ì"
                 };
                 stompClient.send("/app/chat.sendMessage", {}, JSON.stringify(chatMessage));
                 messageInput.value = '';

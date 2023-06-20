@@ -3,13 +3,14 @@ package com.example.demo.controller;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import com.example.demo.domain.ChatMessage;
 
 @Controller
 // 컨트롤러임을 선언.
 public class WebSocketController {
-	
+	/*
 	@MessageMapping("/chat.sendMessage")
 	// /app/chat/sendMessage 결로로 들어오는 메시지를 처리하는 핸들러.
 	@SendTo("/topic/public")
@@ -24,4 +25,11 @@ public class WebSocketController {
 	public ChatMessage addUser(ChatMessage chatMessage) {
 		return chatMessage;
 	}
+	*/
+	
+	@GetMapping("/")
+	public String chat() {
+		return "chat";
+	}
 }
+

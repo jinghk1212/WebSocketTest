@@ -5,6 +5,7 @@ import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
+import org.springframework.web.socket.config.annotation.WebSocketTransportRegistration;
 
 @Configuration
 // 설정파일임을 나타낸다.
@@ -34,5 +35,9 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 	 
 	 SockJS : WebSocket을 지원하지 않는 일부 브라우저에서도 사용하게 할 수 있는 JavaScript 라이브러리
 	 */
+	@Override
+	public void configureWebSocketTransport(WebSocketTransportRegistration registration) {
+		registration.setMessageSizeLimit(8192).setSendBufferSizeLimit(8192).setSendTimeLimit(10000);
+	}
 	
 }
